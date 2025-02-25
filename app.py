@@ -1,30 +1,16 @@
-from flask import Flask, render_template, request
+from flask import Flask
+from app.controllers import problema_controller, autor_controller
 
 app = Flask(__name__)
 
-# Página principal com formulário
-@app.route("/index")
-def index():
-    return render_template("index.html")
+# Rota inicial
+app.add_url_rule("/index", "index", problema_controller.mostrar_formulario)
 
-# Página que processa os dados
-@app.route("/resultado", methods=["POST"])
-def resultado():
-    nome = request.form["nome"]
-    idade = request.form["idade"]
-    profissao = request.form["profissao"]
-    return f"<h1>Nome: {nome}</h1><h2>Idade: {idade}</h2><h3>Profissão: {profissao}</h3>"
+# Rota do problema
+app.add_url_rule("/problema", "problema", problema_controller.processar_problema, methods=["POST"])
 
-# Página do autor
-@app.route("/autor")
-def autor():
-    return """
-    <h1>Autor: Eliane Lucas de Sousa </h1>
-    <h2>Formação:</h2>
-    <p>Técnica em TI- IFCE - 2024</p>
-    <h2>Experiência:</h2>
-    <p>Desenvolvedor - Empresa Y - 2024</p>
-    """
+# Rota do autor
+app.add_url_rule("/autor", "autor", autor_controller.mostrar_autor)
 
 if __name__ == "__main__":
     app.run(debug=True)
